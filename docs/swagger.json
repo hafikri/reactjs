@@ -1,0 +1,284 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Ini merupakan sebuah applikasi data player game",
+    "version": "1.0.0",
+    "title": "Game APPS",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/v1",
+  "tags": [
+    {
+      "name": "players",
+      "description": "Semua data tentang players games"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/players": {
+      "post": {
+        "tags": [
+          "players"
+        ],
+        "summary": "Tambah data players",
+        "description": "Untuk menambahkan data players baru",
+        "operationId": "addPlayers",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/players"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "success"
+          },
+          "400": {
+            "description": "Failed. username or email or password field cannot be empty"
+          },
+          "500": {
+            "description": "Failed. Some error occurred while creating the Player"
+          }
+        }
+      }
+    },
+    "/players/findAll": {
+      "get": {
+        "tags": [
+          "players"
+        ],
+        "summary": "Mencari semua data players",
+        "description": "Untuk mencari semua data players",
+        "operationId": "findPlayers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ApiResponse"
+                }
+              ],
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/players"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some error occurred while retrieving players"
+          }
+        }
+      }
+    },
+    "/players/{playersId}": {
+      "get": {
+        "tags": [
+          "players"
+        ],
+        "summary": "Mencari data players berdasarkan id",
+        "description": "Menampilkan data dengan id players yang dicari",
+        "operationId": "getPlayersById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playersId",
+            "in": "path",
+            "description": "ID dari data players",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ApiResponse"
+                }
+              ],
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/players"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error retrieving Player with id"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "players"
+        ],
+        "summary": "Update data user dari id players",
+        "description": "Mngeupdate data players berdasarkan id",
+        "operationId": "updatePlayersWithForm",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playersId",
+            "in": "path",
+            "description": "ID dari players yang akan di update data",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "username",
+            "in": "formData",
+            "description": "Updated name of the pet",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "Updated status of the pet",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "Updated status of the pet",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player was updated successfully"
+          },
+          "400": {
+            "description": "Cannot update Player with id=${id}. Maybe Player was not found or req.body is empty!"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "players"
+        ],
+        "summary": "Delete data players",
+        "description": "Menghapus data player berdasarkan id",
+        "operationId": "deletePlayers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playersId",
+            "in": "path",
+            "description": "Players ID yang akan di delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player was deleted successfully!"
+          },
+          "400": {
+            "description": "Cannot delete Player with id=${id}. Maybe Player was not found!"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "players": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "players1"
+        },
+        "email": {
+          "type": "string",
+          "example": "players1@binar.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "players1"
+        }
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
